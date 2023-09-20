@@ -9,7 +9,12 @@ class Booking extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['seat_id' , 'user_id'];
+    protected $fillable = ['trip_id', 'seat_id' , 'user_id'];
+
+    public function trip()
+    {
+        return $this->belongsTo(Trip::class);
+    }
 
     public function seat()
     {

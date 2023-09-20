@@ -13,8 +13,8 @@ class Seat extends Model
         'seat_no',
         'is_available',
         'bus_id',
-        'start_station_id',
-        'end_station_id'
+//        'start_station_id',
+//        'end_station_id'
     ];
 
     protected $casts = [
@@ -26,13 +26,29 @@ class Seat extends Model
         return $this->belongsTo(Bus::class);
     }
 
-    public function start_station()
+    public function bookings()
     {
-        return $this->belongsTo(Station::class , 'start_station_id');
+        return $this->hasMany(Booking::class);
     }
 
-    public function end_station()
+//    public function start_station()
+//    {
+//        return $this->belongsTo(Station::class , 'start_station_id');
+//    }
+//
+//    public function end_station()
+//    {
+//        return $this->belongsTo(Station::class , 'end_station_id');
+//    }
+
+    public function scopeGetAvailableSeats($query, $startStationId, $endStationId)
     {
-        return $this->belongsTo(Station::class , 'end_station_id');
+       // dd($startStationId);
+        return $query->whereHas('bus.trips', function ($query) use ($startStationId, $endStationId) {
+            $query->whereHas('stations', function ($query) use ($startStationId, $endStationId) {
+                $query->where('station_id', $startStationId)
+                    ->orWhere('station_id', $endStationId);
+            });
+        })->get();
     }
 }

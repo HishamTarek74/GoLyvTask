@@ -27,4 +27,9 @@ class Trip extends Model
     {
         return $this->belongsToMany(Station::class);
     }
+
+    public function getArrivalStation()
+    {
+        return $this->stations()->last();
+    }
 }
