@@ -31,15 +31,15 @@ class Seat extends Model
         return $this->hasMany(Booking::class);
     }
 
-//    public function start_station()
-//    {
-//        return $this->belongsTo(Station::class , 'start_station_id');
-//    }
-//
-//    public function end_station()
-//    {
-//        return $this->belongsTo(Station::class , 'end_station_id');
-//    }
+    public function start_station()
+    {
+        return $this->belongsTo(Station::class , 'start_station_id');
+    }
+
+    public function end_station()
+    {
+        return $this->belongsTo(Station::class , 'end_station_id');
+    }
 
     public function scopeGetAvailableSeats($query, $startStationId, $endStationId)
     {
@@ -49,6 +49,6 @@ class Seat extends Model
                 $query->where('station_id', $startStationId)
                     ->orWhere('station_id', $endStationId);
             });
-        })->get();
+        })->where('is_available' , true)->get();
     }
 }

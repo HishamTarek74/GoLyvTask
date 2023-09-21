@@ -18,4 +18,5 @@ Route::prefix('auth')->as('auth.')->group(function () {
 //Bus System
 Route::prefix('bus')->as('bus.')->group(function () {
     Route::get('/available-seats' , [BusController::class, 'getAvailableSeats']);
+    Route::post('/book-seat', [BusController::class, 'bookSeat'])->middleware('auth:sanctum');
 });
